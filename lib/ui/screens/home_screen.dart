@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import '/ui/screens/task_screen.dart';
-import '/ui/widgets/tasks_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do/bloc/states.dart';
 import 'package:to_do/bloc/cubit.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:to_do/ui/widgets/deflt.dart';
+
 
 
 class HomeScreen extends StatelessWidget {
-
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,41 +18,35 @@ class HomeScreen extends StatelessWidget {
         listener: (context,state) {},
         builder: (context,state) {
           return Scaffold(
-            backgroundColor: Colors.lightBlueAccent,
+            backgroundColor: Color(0xFF6666FF),
             floatingActionButton:
             FloatingActionButton(
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: Color(0xFF6666FF),
                 child: Icon(Icons.add),
-                onPressed: () {
 
-                  // TaskCubit.get(context).addTask("newTaskTitle!");
+              onPressed: () {
 
-                  // showModalBottomSheet(
-                  //     context: context,
-                  //     isScrollControlled: true,
-                  //     builder: (context) => SingleChildScrollView(
-                  //         child:Container(
-                  //           // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  //           child: NewTaskScreen(),
-                  //         )
-                  //     )
-                  // );
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
 
+                  builder: (_) {
+                    final cubit = BlocProvider.of<TaskCubit>(context);
+                    return BlocProvider.value(
+                    value: cubit,
+                      child: SingleChildScrollView(
+                          child: Container(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: NewTaskScreen(),
 
-                  scaffoldKey.currentState?.showBottomSheet(
-                          (context) => Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(
-                      20.0,
-                  ),
-                  child: Form(
-                  key: formKey,
-                  child: NewTaskScreen(),
-                          ),
-                  ),
-                  );
+                      )
+                      )
+                    );
+                  },
+                );
 
-                }
+              }
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                         child: Icon(
                           Icons.list,
                           size: 30.0,
-                          color: Colors.lightBlueAccent,
+                          color: Color(0xFF6666FF),
                         ),
                         backgroundColor: Colors.white,
                         radius: 30.0,
@@ -106,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                         topRight: Radius.circular(20.0),
                       ),
                     ),
-                    child: TasksList(),
+                      child: bodyWidget(TaskCubit.get(context).taskCount())
                   ),
                 ),
               ],

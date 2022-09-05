@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do/bloc/states.dart';
 import 'package:to_do/bloc/cubit.dart';
+import 'dart:developer';
+import 'package:to_do/bloc/states.dart';
+import 'package:hexcolor/hexcolor.dart';
+
+
 
 class NewTaskScreen extends StatelessWidget {
 
@@ -11,13 +14,14 @@ class NewTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // return BlocConsumer<TaskCubit, TaskStates>(
-    //   listener: (context, state) {
-    //     if (state is TaskAddState) {
-    //       Navigator.pop(context);
-    //     }
-    //   },
-    //   builder: (context, state) {
+
+    return BlocConsumer<TaskCubit, TaskStates>(
+      listener: (context, state) {
+        if (state is TaskAddState) {
+          Navigator.pop(context);
+        }
+      },
+      builder: (context, state) {
         return Container(
           color: Color(0xff757575),
           child: Container(
@@ -37,7 +41,7 @@ class NewTaskScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30.0,
-                    color: Colors.lightBlueAccent,
+                    color: Color(0xFF6666FF),
                   ),
                 ),
                 TextField(
@@ -56,18 +60,20 @@ class NewTaskScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  color: Colors.lightBlueAccent,
+                  color: Color(0xFF6666FF),
                   onPressed: () {
 
+                    log("Add is pressed: $newTaskTitle");
+
                     TaskCubit.get(context).addTask(newTaskTitle!);
-                    Navigator.pop(context);
+
                   },
                 ),
               ],
             ),
           ),
         );
-    //     },
-    // );
+        },
+    );
   }
 }

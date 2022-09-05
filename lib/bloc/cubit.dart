@@ -1,9 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do/bloc/states.dart';
 import '/dataLayer/model/task.dart';
-import 'package:flutter/material.dart';
-
-
 
 
 class TaskCubit extends Cubit<TaskStates> {
@@ -13,10 +10,7 @@ class TaskCubit extends Cubit<TaskStates> {
   static TaskCubit get(context) => BlocProvider.of(context);
 
 
-  List<Task> tasks = [
-    Task(name: 'First Task'),
-    Task(name: 'HI Task'),
-  ];
+  List<Task> tasks = [];
 
   int taskCount() => tasks.length;
 

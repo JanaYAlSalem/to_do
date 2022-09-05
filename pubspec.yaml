@@ -41,7 +41,7 @@ dependencies:
   flutter_modular: any
   flutter_bloc: ^8.1.1
   bloc: ^8.1.0
-
+  intl: ^0.17.0
 
 
 
