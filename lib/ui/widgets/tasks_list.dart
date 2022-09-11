@@ -7,38 +7,67 @@ import 'package:to_do/bloc/cubit.dart';
 class TasksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TaskCubit, TaskStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (TaskCubit.get(context).taskCount() == 0) {
-          return Center(
-            child: ListTile(title:
-            Text(
-              " You don't have tasks yet ",
-              style: TextStyle(fontSize: 24, color: Colors.grey),
-            ),
-            ),
-          ) ;
+    Future<List<Map>> readtask() async {
+      List<Map> r = await TaskCubit.get(context).getDatabase();
+      return r;
+    }
 
-        } else {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              final task = TaskCubit.get(context).tasks[index];
-              return TaskTile(
-                taskTitle: task.name!,
-                isChecked: task.isDone,
-                checkboxCallback: (checkboxState) {
-                  TaskCubit.get(context).updateTask(task);
-                },
-                longPressCallback: () {
-                  TaskCubit.get(context).deleteTask(task);
-                },
-              );
-            },
-            itemCount: TaskCubit.get(context).taskCount(),
+    return BlocConsumer<TaskCubit, TaskStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return ListView(
+            children: [
+              FutureBuilder(
+                  future: readtask(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Map>> snapshot) {
+                    int? lengthData = snapshot.data?.length;
+                    if (lengthData == null) {
+                      TaskCubit.get(context).getDataLength(length: 0);
+                      return Center(
+                        child: ListTile(
+                          title: Text(
+                            " You don't have tasks yet ",
+                            style: TextStyle(fontSize: 24, color: Colors.grey),
+                          ),
+                        ),
+                      );
+                    } else {
+                      TaskCubit.get(context).getDataLength(length: lengthData);
+
+                      return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            var idTask = snapshot.data![index]['id'];
+                            var isDone = snapshot.data![index]['isDone'];
+
+                            return Card(
+                              child: TaskTile(
+                                taskTitle: "${snapshot.data![index]['title']}",
+                                isChecked: isC(isDone),
+                                checkboxCallback: (checkboxState) {
+                                  TaskCubit.get(context).updateTask(
+                                      isDone: !isC(isDone), id: idTask);
+                                },
+                                longPressCallback: () {
+                                  TaskCubit.get(context).deleteData(id: idTask);
+                                },
+                              ),
+                            );
+                          });
+                    }
+                  }),
+            ],
           );
-        }
-      },
-    );
+        });
   }
+}
+
+bool isC(dynamic isDone) {
+  if (isDone == "false" || isDone == 0) {
+    return false;
+  } else
+    return true;
 }

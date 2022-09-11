@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/ui/screens/splash_screen.dart';
-import 'package:to_do/ui/screens/task_screen.dart';
 import '/ui/screens/home_screen.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:bloc/bloc.dart';

@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do/bloc/cubit.dart';
-import 'dart:developer';
 import 'package:to_do/bloc/states.dart';
-import 'package:hexcolor/hexcolor.dart';
-
-
 
 class NewTaskScreen extends StatelessWidget {
-
   String? newTaskTitle;
 
   @override
   Widget build(BuildContext context) {
-
-
     return BlocConsumer<TaskCubit, TaskStates>(
       listener: (context, state) {
-        if (state is TaskAddState) {
+        if (state is AppInsertDatabaseState) {
           Navigator.pop(context);
         }
       },
@@ -48,10 +41,8 @@ class NewTaskScreen extends StatelessWidget {
                   autofocus: true,
                   textAlign: TextAlign.center,
                   onChanged: (newText) {
-
                     newTaskTitle = newText;
-
-                    },
+                  },
                 ),
                 FlatButton(
                   child: Text(
@@ -62,18 +53,15 @@ class NewTaskScreen extends StatelessWidget {
                   ),
                   color: Color(0xFF6666FF),
                   onPressed: () {
-
-                    log("Add is pressed: $newTaskTitle");
-
-                    TaskCubit.get(context).addTask(newTaskTitle!);
-
+                    TaskCubit.get(context)
+                        .insertToDatabase(title: newTaskTitle!, isDone: false);
                   },
                 ),
               ],
             ),
           ),
         );
-        },
+      },
     );
   }
 }
